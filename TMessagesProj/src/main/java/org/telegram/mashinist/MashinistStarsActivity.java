@@ -53,31 +53,43 @@ public class MashinistStarsActivity extends BaseFragment {
     }
 
     private void loadData() {
-    new Thread(() -> {
-        try {
-            java.net.URL url = new java.net.URL("https://mashinistgram.atwebpages.com/api/get_user.php?user_id=1");
-            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-            java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) sb.append(line);
-            reader.close();
-            conn.disconnect();
-            
-            final String result = sb.toString();
-            if (getParentActivity() != null) {
-                getParentActivity().runOnUiThread(() -> {
-                    starsBalanceView.setText("⭐ " + result);
-                });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    java.net.URL url = new java.net.URL("https://mashinistgram.atwebpages.com/api/get_user.php?user_id=1");
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(5000);
+                    conn.setReadTimeout(5000);
+                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+                    final StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    reader.close();
+                    conn.disconnect();
+
+                    final String result = sb.toString();
+                    if (getParentActivity() != null) {
+                        getParentActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                starsBalanceView.setText("⭐ " + result);
+                            }
+                        });
+                    }
+                } catch (final Exception e) {
+                    if (getParentActivity() != null) {
+                        getParentActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                starsBalanceView.setText("Error: " + e.getMessage());
+                            }
+                        });
+                    }
+                }
             }
-        } catch (Exception e) {
-            if (getParentActivity() != null) {
-                getParentActivity().runOnUiThread(() -> {
-                    starsBalanceView.setText("Error: " + e.getMessage());
-                });
-            }
-        }
-    }).start();
+        }).start();
     }
+}
