@@ -56,10 +56,12 @@ public class MashinistStarsActivity extends BaseFragment {
         long userId = getUserConfig().getClientUserId();
         new Thread(() -> {
             StarsAPI.UserData data = StarsAPI.getUserData(userId);
-            activity.runOnUiThread(() -> {
-                starsBalanceView.setText("⭐ " + data.starsBalance);
-                premiumStatusView.setText(data.hasPremium ? "Premium Active ✅" : "No Premium");
-            });
+            if (getParentActivity() != null) {
+                getParentActivity().runOnUiThread(() -> {
+                    starsBalanceView.setText("⭐ " + data.starsBalance);
+                    premiumStatusView.setText(data.hasPremium ? "Premium Active ✅" : "No Premium");
+                });
+            }
         }).start();
     }
 }
