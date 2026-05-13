@@ -3,6 +3,7 @@ package org.telegram.mashinist;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.ui.ActionBar.ActionBar;
