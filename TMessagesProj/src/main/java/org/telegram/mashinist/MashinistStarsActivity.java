@@ -53,10 +53,31 @@ public class MashinistStarsActivity extends BaseFragment {
     }
 
     private void loadData() {
-        // Тестовая заглушка
-        starsBalanceView.post(() -> {
-            starsBalanceView.setText("⭐ TEST 999");
-            premiumStatusView.setText("Premium TEST ✅");
-        });
+    new Thread(() -> {
+        try {
+            java.net.URL url = new java.net.URL("https://mashinistgram.atwebpages.com/api/get_user.php?user_id=1");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) sb.append(line);
+            reader.close();
+            conn.disconnect();
+            
+            final String result = sb.toString();
+            if (getParentActivity() != null) {
+                getParentActivity().runOnUiThread(() -> {
+                    starsBalanceView.setText("⭐ " + result);
+                });
+            }
+        } catch (Exception e) {
+            if (getParentActivity() != null) {
+                getParentActivity().runOnUiThread(() -> {
+                    starsBalanceView.setText("Error: " + e.getMessage());
+                });
+            }
+        }
+    }).start();
     }
-}
