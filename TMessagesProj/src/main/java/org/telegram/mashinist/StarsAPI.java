@@ -48,6 +48,7 @@ public class StarsAPI {
 
             return new UserData(userId, stars, premium, premiumUntil);
         } catch (Exception e) {
+           android.util.Log.e("MashinistGram", "StarsAPI error for user " + userId, e);
             return new UserData(userId, 0, false, 0);
         }
     }
