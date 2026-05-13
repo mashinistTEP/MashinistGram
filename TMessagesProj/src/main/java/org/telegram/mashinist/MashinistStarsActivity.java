@@ -54,12 +54,12 @@ public class MashinistStarsActivity extends BaseFragment {
 
     private void loadData() {
         long userId = getUserConfig().getClientUserId();
-        StarsHelper.loadStars(userId, new StarsHelper.StarsCallback() {
-            @Override
-            public void onResult(int stars, boolean hasPremium) {
-                starsBalanceView.setText("⭐ " + stars);
-                premiumStatusView.setText(hasPremium ? "Premium Active ✅" : "No Premium");
-            }
-        });
+        new Thread(() -> {
+            StarsAPI.UserData data = StarsAPI.getUserData(userId);
+            activity.runOnUiThread(() -> {
+                starsBalanceView.setText("⭐ " + data.starsBalance);
+                premiumStatusView.setText(data.hasPremium ? "Premium Active ✅" : "No Premium");
+            });
+        }).start();
     }
 }
