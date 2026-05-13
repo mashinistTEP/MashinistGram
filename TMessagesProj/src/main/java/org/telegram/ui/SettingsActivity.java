@@ -698,6 +698,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             StarsController c = StarsController.getInstance(currentAccount);
             long balance = c.getBalance().amount;
             items.add(SettingCell.Factory.of(12, 0xFFEFA612, 0xFFE77512, R.drawable.settings_stars, getString(R.string.TelegramStars), null, c.balanceAvailable() && balance > 0 ? StarsIntroActivity.formatStarsAmount(c.getBalance(), 0.85f, ' ') : ""));
+
+        items.add(SettingCell.Factory.of(999, 0xFFFFD700, 0xFFFFD700, R.drawable.settings_stars, "⭐ Мои звёзды MashinistGram"));
         }
         StarsController.getInstance(currentAccount, true).getBalance();
         if (ApplicationLoader.isBetaBuild() || ApplicationLoader.isStandaloneBuild() || ApplicationLoader.isHuaweiStoreBuild() || (StarsController.getInstance(currentAccount, true).balanceAvailable() && (StarsController.getInstance(currentAccount, true).hasTransactions() || StarsController.getInstance(currentAccount, true).getBalance().positive()))) {
@@ -818,6 +820,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 break;
             case 12:
                 presentFragment(new StarsIntroActivity());
+                break;
+            case 999:
+                presentFragment(new org.telegram.mashinist.MashinistStarsActivity());
                 break;
             case 13:
                 presentFragment(new TONIntroActivity());
